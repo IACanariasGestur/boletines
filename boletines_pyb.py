@@ -158,32 +158,33 @@ entrada_keywords = st.text_input(
     placeholder="Ejemplo: urbanismo, planeamiento, evaluación ambiental"
 )
 
-if st.button("🔍 Buscar boletines relevantes") and entrada_keywords.strip():
-    entrada_normalizada = [
-        ''.join(c for c in unicodedata.normalize('NFKD', kw.strip()) if not unicodedata.combining(c)).lower()
-        for kw in entrada_keywords.split(",") if kw.strip()
-    ]
+if st.button("🔍 Buscar boletines relevantes"):
+    if entrada_keywords.strip():
+        entrada_normalizada = [
+            ''.join(c for c in unicodedata.normalize('NFKD', kw.strip()) if not unicodedata.combining(c)).lower()
+            for kw in entrada_keywords.split(",") if kw.strip()
+        ]
 
-    documentos = []
-    documentos += obtener_documentos()
-    documentos += obtener_documentos_boc_pdf()
-    documentos += obtener_documentos_bop("BOP LP", "https://www.boplaspalmas.net/boletines", 3, usar_ceros=True)
-    documentos += obtener_documentos_bop("BOP SCTF", "https://www.bopsantacruzdetenerife.es/boletines", 4, usar_ceros=False)
+        documentos = []
+        documentos += obtener_documentos()
+        documentos += obtener_documentos_boc_pdf()
+        documentos += obtener_documentos_bop("BOP LP", "https://www.boplaspalmas.net/boletines", 3, usar_ceros=True)
+        documentos += obtener_documentos_bop("BOP SCTF", "https://www.bopsantacruzdetenerife.es/boletines", 4, usar_ceros=False)
 
-    # Filtrado final por las keywords introducidas por el usuario
-    documentos_filtrados = [
-        doc for doc in documentos
-        if any(k in normalizar(doc["titulo"] + " " + doc["resumen"]) for k in entrada_normalizada)
-    ]
+        # Filtrado final por las keywords introducidas por el usuario
+        documentos_filtrados = [
+            doc for doc in documentos
+            if any(k in normalizar(doc["titulo"] + " " + doc["resumen"]) for k in entrada_normalizada)
+        ]
 
-    if documentos_filtrados:
-        df = pd.DataFrame(documentos_filtrados)
-        st.success(f"✅ {len(df)} documento(s) encontrados con las palabras clave proporcionadas.")
-        st.dataframe(df)
+        if documentos_filtrados:
+            df = pd.DataFrame(documentos_filtrados)
+            st.success(f"✅ {len(df)} documento(s) encontrados con las palabras clave proporcionadas.")
+            st.dataframe(df)
 
-        csv = df.to_csv(index=False, encoding="utf-8-sig")
-        st.download_button("📥 Descargar CSV", csv, "boletines.csv", "text/csv")
+            csv = df.to_csv(index=False, encoding="utf-8-sig")
+            st.download_button("📥 Descargar CSV", csv, "boletines.csv", "text/csv")
+        else:
+            st.warning("📭 No se encontraron publicaciones relevantes con esas palabras clave.")
     else:
-        st.warning("📭 No se encontraron publicaciones relevantes con esas palabras clave.")
-elif st.button("🔍 Buscar boletines relevantes"):
-    st.warning("Por favor, introduce al menos una palabra clave.")
+        st.warning("⚠️ Por favor, introduce al menos una palabra clave.")
