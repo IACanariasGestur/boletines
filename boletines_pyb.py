@@ -151,7 +151,12 @@ def obtener_documentos_bop(nombre_bop, base_url, max_paginas, usar_ceros):
     return documentos
 
 # ---------------- INTERFAZ STREAMLIT ---------------- #
-st.title("📰 Buscador en boletines oficiales [BOE, BOC, BOP LP/SCTF]")
+st.markdown("""
+<div style='text-align: center;'>
+    <h1 style='font-size: 2.2em; margin-bottom: 0.1em;'>📰 Buscador en boletines oficiales</h1>
+    <p style='font-size: 1.1em; color: gray;'>[BOE, BOC, BOP LP/SCTF]</p>
+</div>
+""", unsafe_allow_html=True)
 
 entrada_keywords = st.text_input(
     "Introduce palabras clave separadas por comas:",
