@@ -153,7 +153,7 @@ def obtener_documentos_bop(nombre_bop, base_url, max_paginas, usar_ceros):
 # ---------------- INTERFAZ STREAMLIT ---------------- #
 st.markdown("""
 <div style='text-align: center;'>
-    <h1 style='font-size: 2.2em; margin-bottom: 0.1em;'>📰 Buscador en boletines oficiales</h1>
+    <h1 style='font-size: 2.2em; margin-bottom: 0.1em;'>Buscador en boletines oficiales</h1>
     <p style='font-size: 1.1em; color: gray;'>[BOE, BOC, BOP LP/SCTF]</p>
 </div>
 """, unsafe_allow_html=True)
@@ -163,7 +163,7 @@ entrada_keywords = st.text_input(
     placeholder="Ejemplo: urbanismo, planeamiento, evaluación ambiental"
 )
 
-if st.button("🔍 Buscar boletines relevantes"):
+if st.button("🌐 Buscar anuncios"):
     if entrada_keywords.strip():
         entrada_normalizada = [
             ''.join(c for c in unicodedata.normalize('NFKD', kw.strip()) if not unicodedata.combining(c)).lower()
@@ -184,7 +184,7 @@ if st.button("🔍 Buscar boletines relevantes"):
 
         if documentos_filtrados:
             df = pd.DataFrame(documentos_filtrados)
-            st.success(f"✅ {len(df)} documento(s) encontrados con las palabras clave proporcionadas.")
+            st.success(f"✅ {len(df)} anuncio(s) encontrado(s) con las palabras clave proporcionadas.")
             st.dataframe(df)
 
             csv = df.to_csv(index=False, encoding="utf-8-sig")
